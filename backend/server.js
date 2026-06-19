@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const eventRoutes = require("./routes/eventRoutes");
 require("dotenv").config();
+const registrationRoutes = require("./routes/registrationRoutes");
 
 // Database connection
 const db = require("./config/db");
@@ -37,6 +38,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/events", eventRoutes);
+
+app.use(
+  "/api/registrations",
+  registrationRoutes
+);
 
 const PORT = process.env.PORT || 5000;
 
