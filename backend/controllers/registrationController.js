@@ -184,7 +184,114 @@ const getMyRegistrations = (req, res) => {
 
 };
 
+const getEventParticipants = (req, res) => {
+
+  const { eventId } = req.params;
+
+  db.query(
+    `
+    SELECT
+      r.id,
+      r.status,
+      u.name,
+      u.email,
+      u.college
+    FROM registrations r
+    JOIN users u
+      ON r.user_id = u.id
+    WHERE r.event_id = ?
+    `,
+    [eventId],
+    (err, results) => {
+
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to fetch participants"
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        participants: results
+      });
+
+    }
+  );
+
+};
+
+const approveRegistration = (req, res) => {
+
+  const { id } = req.params;
+
+  db.query(
+    `
+    UPDATE registrations
+    SET status = 'approved'
+    WHERE id = ?
+    `,
+    [id],
+    (err, result) => {
+
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Approval failed"
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Registration approved"
+      });
+
+    }
+  );
+
+};
+
+const rejectRegistration = (req, res) => {
+
+  const { id } = req.params;
+
+  db.query(
+    `
+    UPDATE registrations
+    SET status = 'rejected'
+    WHERE id = ?
+    `,
+    [id],
+    (err, result) => {
+
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Rejection failed"
+        });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Registration not found"
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Registration rejected"
+      });
+
+    }
+  );
+
+};
+
 module.exports = {
   registerForEvent,
-    getMyRegistrations
+    getMyRegistrations,
+    getEventParticipants,
+    approveRegistration,
+    rejectRegistration
 };
