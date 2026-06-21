@@ -26,6 +26,7 @@ db.connect((err) => {
 
 const authRoutes = require("./routes/authRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use(
   "/api/registrations",
   registrationRoutes
 );
+app.use("/api/comments", commentRoutes);
 
 const PORT = process.env.PORT || 5000;
 

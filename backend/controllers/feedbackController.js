@@ -96,7 +96,87 @@ const getEventFeedback = (req, res) => {
 
 };
 
+const getFeedbackAnalytics = (req, res) => {
+
+  const { eventId } = req.params;
+
+  const analyticsQuery = `
+    SELECT
+      ROUND(AVG(rating), 1) AS averageRating,
+      COUNT(*) AS totalFeedback
+    FROM feedback
+    WHERE event_id = ?
+  `;
+
+  db.query(
+    analyticsQuery,
+    [eventId],
+    (err, analyticsResult) => {
+
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to fetch analytics"
+        });
+      }
+
+      const distributionQuery = `
+        SELECT
+          rating,
+          COUNT(*) AS count
+        FROM feedback
+        WHERE event_id = ?
+        GROUP BY rating
+        ORDER BY rating DESC
+      `;
+
+      db.query(
+        distributionQuery,
+        [eventId],
+        (err, distributionResult) => {
+
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: "Failed to fetch rating distribution"
+            });
+          }
+
+          const ratingDistribution = {
+            5: 0,
+            4: 0,
+            3: 0,
+            2: 0,
+            1: 0
+          };
+
+          distributionResult.forEach(item => {
+            ratingDistribution[item.rating] = item.count;
+          });
+
+          return res.status(200).json({
+            success: true,
+            analytics: {
+              averageRating:
+                analyticsResult[0].averageRating || 0,
+
+              totalFeedback:
+                analyticsResult[0].totalFeedback || 0,
+
+              ratingDistribution
+            }
+          });
+
+        }
+      );
+
+    }
+  );
+
+};
+
 module.exports = {
   submitFeedback,
-  getEventFeedback
+  getEventFeedback,
+  getFeedbackAnalytics
 };
