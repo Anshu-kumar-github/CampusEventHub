@@ -120,7 +120,8 @@ const createEvent = async (req, res) => {
 
 const getAllEvents = (req, res) => {
 
-  const { search, category, college } = req.query;
+  const { search, category, college, startDate
+ } = req.query;
 
   let query = `
     SELECT
@@ -152,6 +153,12 @@ const getAllEvents = (req, res) => {
     query += " AND u.college = ?";
     values.push(college);
   }
+
+  // Filter by start date
+if (startDate) {
+  query += " AND DATE(e.start_date) >= ?";
+  values.push(startDate);
+}
 
   // Sort newest first
   query += " ORDER BY e.created_at DESC";

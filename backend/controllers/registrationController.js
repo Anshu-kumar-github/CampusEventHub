@@ -184,37 +184,111 @@ const getMyRegistrations = (req, res) => {
 
 };
 
+// const getEventParticipants = (req, res) => {
+
+//   const { eventId } = req.params;
+
+//   db.query(
+//     `
+//     SELECT
+//       r.id,
+//       r.status,
+//       u.name,
+//       u.email,
+//       u.college
+//     FROM registrations r
+//     JOIN users u
+//       ON r.user_id = u.id
+//     WHERE r.event_id = ?
+//     `,
+//     [eventId],
+//     (err, results) => {
+
+//       if (err) {
+//         return res.status(500).json({
+//           success: false,
+//           message: "Failed to fetch participants"
+//         });
+//       }
+
+//       return res.status(200).json({
+//         success: true,
+//         participants: results
+//       });
+
+//     }
+//   );
+
+// };
+
 const getEventParticipants = (req, res) => {
 
   const { eventId } = req.params;
 
+  // Check event owner first
   db.query(
-    `
-    SELECT
-      r.id,
-      r.status,
-      u.name,
-      u.email,
-      u.college
-    FROM registrations r
-    JOIN users u
-      ON r.user_id = u.id
-    WHERE r.event_id = ?
-    `,
+    "SELECT college_id FROM events WHERE id = ?",
     [eventId],
-    (err, results) => {
+    (err, eventResult) => {
 
       if (err) {
         return res.status(500).json({
           success: false,
-          message: "Failed to fetch participants"
+          message: "Database error"
         });
       }
 
-      return res.status(200).json({
-        success: true,
-        participants: results
-      });
+      if (eventResult.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Event not found"
+        });
+      }
+
+      const event = eventResult[0];
+
+      // Ownership check
+      if (
+        req.user.role !== "super_admin" &&
+        event.college_id !== req.user.id
+      ) {
+        return res.status(403).json({
+          success: false,
+          message: "Unauthorized"
+        });
+      }
+
+      // Fetch participants
+      db.query(
+        `
+        SELECT
+          r.id,
+          r.status,
+          u.name,
+          u.email,
+          u.college
+        FROM registrations r
+        JOIN users u
+          ON r.user_id = u.id
+        WHERE r.event_id = ?
+        `,
+        [eventId],
+        (err, results) => {
+
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: "Failed to fetch participants"
+            });
+          }
+
+          return res.status(200).json({
+            success: true,
+            participants: results
+          });
+
+        }
+      );
 
     }
   );
