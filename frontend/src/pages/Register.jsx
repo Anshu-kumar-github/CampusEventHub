@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import api from "../services/api";
 
 const Register = () => {
+
+    const navigate = useNavigate();
+
+const { token } = useAuth();
+
+useEffect(() => {
+
+  if (token) {
+    navigate("/dashboard");
+  }
+
+}, [token, navigate]);
 
   const [formData, setFormData] = useState({
     name: "",

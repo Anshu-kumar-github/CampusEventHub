@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   );
 
   const login = (userData, jwtToken) => {
+    console.log("LOGIN FUNCTION:", userData);
 
     setUser(userData);
     setToken(jwtToken);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
@@ -10,7 +10,15 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, token } = useAuth();
+
+  useEffect(() => {
+
+  if (token) {
+    navigate("/dashboard");
+  }
+
+}, [token, navigate]);
 
   const handleSubmit = async (e) => {
 
@@ -25,6 +33,7 @@ const Login = () => {
           password
         }
       );
+      console.log(response.data.user);
 
       login(
         response.data.user,
