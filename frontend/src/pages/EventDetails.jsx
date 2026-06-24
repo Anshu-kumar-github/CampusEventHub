@@ -266,16 +266,25 @@ const EventDetails = () => {
         )}
 
         {(
-          user?.role === "college_admin" ||
-          user?.role === "super_admin"
-        ) && (
-          <Link
-            to={`/participants/${event.id}`}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            View Participants
-          </Link>
-        )}
+  user?.role === "college_admin" ||
+  user?.role === "super_admin"
+) && (
+  <>
+    <Link
+      to={`/participants/${event.id}`}
+      className="bg-blue-500 text-white px-4 py-2 rounded"
+    >
+      View Participants
+    </Link>
+
+    <Link
+      to={`/analytics/${event.id}`}
+      className="bg-purple-500 text-white px-4 py-2 rounded"
+    >
+      Analytics
+    </Link>
+  </>
+)}
 
       </div>
       <FeedbackSection

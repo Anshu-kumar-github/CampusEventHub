@@ -92,6 +92,7 @@ import CreateEvent from "./pages/CreateEvent";
 import MyRegistrations from "./pages/MyRegistrations";
 import Participants from "./pages/Participants";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Analytics from "./pages/Analytics";
 
 function App() {
   return (
@@ -150,6 +151,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Participants />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/analytics/:eventId"
+        element={
+          <ProtectedRoute>
+            <Analytics />
           </ProtectedRoute>
         }
       />
