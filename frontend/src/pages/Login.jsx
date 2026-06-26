@@ -73,7 +73,7 @@ const Login = () => {
             value={email}
             onChange={(e) =>
               setEmail(e.target.value)
-            }
+            }AC
             className="w-full border p-3 rounded"
           />
 

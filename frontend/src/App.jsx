@@ -93,6 +93,8 @@ import MyRegistrations from "./pages/MyRegistrations";
 import Participants from "./pages/Participants";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Analytics from "./pages/Analytics";
+import AdminRoute from "./routes/AdminRoute";
+import EditEvent from "./pages/EditEvent";
 
 function App() {
   return (
@@ -132,8 +134,10 @@ function App() {
         path="/create-event"
         element={
           <ProtectedRoute>
-            <CreateEvent />
-          </ProtectedRoute>
+  <AdminRoute>
+    <CreateEvent />
+  </AdminRoute>
+</ProtectedRoute>
         }
       />
 
@@ -163,6 +167,17 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+  path="/edit-event/:id"
+  element={
+    <ProtectedRoute>
+      <AdminRoute>
+        <EditEvent />
+      </AdminRoute>
+    </ProtectedRoute>
+  }
+/>
 
     </Routes>
   );

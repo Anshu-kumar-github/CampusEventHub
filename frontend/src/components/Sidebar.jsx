@@ -67,14 +67,16 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        {user?.role === "college_admin" && (
-          <li>
-            <Link to="/create-event">
-              Create Event
-            </Link>
-          </li>
-        )}
-
+        {(
+  user?.role === "college_admin" ||
+  user?.role === "super_admin"
+) && (
+  <li>
+    <Link to="/create-event">
+      Create Event
+    </Link>
+  </li>
+)}
       </ul>
 
     </div>
