@@ -1,69 +1,73 @@
-// // const Events = () => {
-// //   return <h1>Events Page</h1>;
-// // };
-
-// // export default Events;
-
-// import Layout from "../components/Layout";
-
-// const Events = () => {
-
-//   return (
-
-//     <Layout>
-
-//       <h1 className="text-3xl font-bold">
-//         Events
-//       </h1>
-
-//       <p className="mt-4">
-//         Event listing will appear here.
-//       </p>
-
-//     </Layout>
-
-//   );
-
-// };
-
-// export default Events;
-
 import { useEffect, useState } from "react";
 
 import Layout from "../components/Layout";
 import EventCard from "../components/EventCard";
 import api from "../services/api";
+import toast from "react-hot-toast";
 
 const Events = () => {
 
   const [events, setEvents] = useState([]);
-
+const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchEvents();
   }, []);
 
   const fetchEvents = async () => {
 
-    try {
+  setLoading(true);
 
-      const response =
-        await api.get("/events");
+  try {
 
-      setEvents(response.data.events);
+    const response =
+      await api.get("/events");
 
-    } catch (error) {
+    setEvents(response.data.events);
 
-      console.log(error);
+  } catch (error) {
 
-    }
+    console.error(error);
 
-  };
+    toast.error(
+      error.response?.data?.message ||
+      "Failed to load events."
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
+if (loading) {
+    return (
+      <Layout>
+        <p className="text-center text-gray-500">
+          Loading events...
+          <div className="flex justify-center py-10">
+  <div
+    className="
+      h-10
+      w-10
+      animate-spin
+      rounded-full
+      border-4
+      border-gray-300
+      border-t-blue-600
+    "
+  ></div>
+</div>
+        </p>
+      </Layout>
+    );
+  }
 
   return (
 
     <Layout>
 
-      <h1 className="text-3xl font-bold mb-5">
+      <h1 className="text-3xl font-bold mb-6">
         Events
       </h1>
 
@@ -82,16 +86,32 @@ const Events = () => {
         <option>Seminar</option>
       </select>
 
-      <div className="grid md:grid-cols-3 gap-4">
+      {events.length === 0 ? (
 
-        {events.map((event) => (
-          <EventCard
-            key={event.id}
-            event={event}
-          />
-        ))}
+  <div className="text-center py-10 text-gray-500">
+    <h2 className="text-xl font-semibold">
+    No Events Found
+  </h2>
 
-      </div>
+  <p className="text-gray-500">
+    Create your first event.
+  </p>
+</div>
+
+) : (
+
+  <div className="grid md:grid-cols-3 gap-4">
+
+    {events.map((event) => (
+      <EventCard
+        key={event.id}
+        event={event}
+      />
+    ))}
+
+  </div>
+
+)}
 
     </Layout>
 

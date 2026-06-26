@@ -10,6 +10,7 @@ import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import FeedbackSection from "../components/FeedbackSection";
 import CommentsSection from "../components/CommentsSection";
+import toast from "react-hot-toast";
 
 const EventDetails = () => {
 
@@ -34,9 +35,14 @@ const EventDetails = () => {
 
     } catch (error) {
 
-      console.log(error);
+  console.error(error);
 
-    }
+  toast.error(
+    error.response?.data?.message ||
+    "Failed to load event."
+  );
+
+}
 
   };
 
@@ -60,17 +66,14 @@ const EventDetails = () => {
         }
       );
 
-      alert(
-        "Registration submitted"
-      );
+      toast.success("Registration submitted");
 
     } catch (error) {
 
-      alert(
-        error.response?.data?.message ||
-        "Registration failed"
-      );
-
+      toast.error(
+  error.response?.data?.message ||
+  "Registration failed"
+);
     }
 
   };
@@ -101,16 +104,17 @@ const EventDetails = () => {
       }
     );
 
-    alert("Event Deleted Successfully");
+    toast.success("Event Deleted Successfully");
 
     navigate("/events");
 
   } catch (error) {
 
-    alert(
-      error.response?.data?.message ||
-      "Failed to delete event"
-    );
+    toast.error(
+  error.response?.data?.message ||
+  "Failed to delete event"
+);
+    toast.error(message);
 
   }
 
@@ -119,7 +123,19 @@ const EventDetails = () => {
   if (!event) {
     return (
       <Layout>
-        <p>Loading...</p>
+        <div className="flex justify-center py-10">
+  <div
+    className="
+      h-10
+      w-10
+      animate-spin
+      rounded-full
+      border-4
+      border-gray-300
+      border-t-blue-600
+    "
+  ></div>
+</div>
       </Layout>
     );
   }
@@ -128,7 +144,7 @@ const EventDetails = () => {
 
     <Layout>
 
-      <h1 className="text-3xl font-bold mb-4">
+      <h1 className="text-3xl font-bold mb-5">
         {event.title}
       </h1>
 

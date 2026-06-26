@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Layout from "../components/Layout";
 import api from "../services/api";
+import toast from "react-hot-toast";
 
 const EditEvent = () => {
 
@@ -54,9 +55,14 @@ setFormData({
 });
     } catch (error) {
 
-      console.log(error);
+  console.error(error);
 
-    }
+  toast.error(
+    error.response?.data?.message ||
+    "Failed to load event."
+  );
+
+}
 
   };
 
@@ -77,42 +83,58 @@ const handleSubmit = async (e) => {
   setError("");
 
   if (!formData.title.trim()) {
-    setError("Title is required.");
-    return;
-  }
+  const message = "Title is required.";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
   if (!formData.description.trim()) {
-    setError("Description is required.");
+    const message = "Description is required.";
+    setError(message);
+    toast.error(message);
     return;
   }
 
   if (!formData.category.trim()) {
-    setError("Category is required.");
+    const message = "Category is required.";
+    setError(message);
+    toast.error(message);
     return;
   }
 
   if (!formData.location.trim()) {
-    setError("Location is required.");
+    const message = "Location is required.";
+    setError(message);
+    toast.error(message);
     return;
   }
 
   if (!formData.start_date) {
-    setError("Start Date is required.");
+    const message = "Start Date is required.";
+    setError(message);
+    toast.error(message);
     return;
   }
 
   if (!formData.end_date) {
-    setError("End Date is required.");
+    const message = "End Date is required.";
+    setError(message);
+    toast.error(message);
     return;
   }
 
   if (!formData.max_participants) {
-    setError("Maximum Participants is required.");
+    const message = "Maximum Participants is required.";
+    setError(message);
+    toast.error(message);
     return;
   }
 
   if (Number(formData.max_participants) <= 0) {
-    setError("Maximum Participants must be greater than 0.");
+    const message = "Maximum Participants must be greater than 0.";
+    setError(message);
+    toast.error(message);
     return;
   }
 
@@ -123,6 +145,7 @@ const handleSubmit = async (e) => {
     setError(
       "End date cannot be before start date."
     );
+    toast.error("End date cannot be before start date.");
     return;
   }
 
@@ -142,10 +165,12 @@ const handleSubmit = async (e) => {
       }
     );
 
-    setSuccess(
-      response.data.message ||
-      "Event Updated Successfully"
-    );
+    const message =
+  response.data.message ||
+  "Event Updated Successfully";
+
+setSuccess(message);
+toast.success(message);
 
     setTimeout(() => {
       navigate("/events");
@@ -153,10 +178,12 @@ const handleSubmit = async (e) => {
 
   } catch (err) {
 
-    setError(
-      err.response?.data?.message ||
-      "Failed to update event."
-    );
+    const message =
+  err.response?.data?.message ||
+  "Failed to update event.";
+
+setError(message);
+toast.error(message);
 
   } finally {
 
@@ -169,7 +196,22 @@ const handleSubmit = async (e) => {
   if (!event) {
     return (
       <Layout>
-        <p>Loading...</p>
+        <p className="text-center text-gray-500">
+  Loading event details...
+</p>
+<div className="flex justify-center py-10">
+  <div
+    className="
+      h-10
+      w-10
+      animate-spin
+      rounded-full
+      border-4
+      border-gray-300
+      border-t-blue-600
+    "
+  ></div>
+</div>
       </Layout>
     );
   }
@@ -178,7 +220,7 @@ const handleSubmit = async (e) => {
 
     <Layout>
 
-      <h1 className="text-3xl font-bold">
+      <h1 className="text-3xl font-bold mb-6">
         Edit Event
       </h1>
       {success && (

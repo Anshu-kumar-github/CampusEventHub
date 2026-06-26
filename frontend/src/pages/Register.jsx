@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 import api from "../services/api";
 
@@ -45,11 +46,18 @@ useEffect(() => {
         formData
       );
 
-      alert(response.data.message);
+      toast.success(
+  response.data.message ||
+  "Registration successful!"
+);
+
+setTimeout(() => {
+  navigate("/");
+}, 1000);
 
     } catch (error) {
 
-      alert(
+      toast.error(
         error.response?.data?.message ||
         "Registration failed"
       );
@@ -63,7 +71,7 @@ useEffect(() => {
 
       <div className="border p-6 rounded w-96 bg-white">
 
-        <h1 className="text-2xl font-bold mb-4 text-center">
+        <h1 className="text-2xl font-bold mb-6 text-center">
           Register
         </h1>
 

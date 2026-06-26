@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
 
@@ -35,16 +36,17 @@ const Login = () => {
       );
       console.log(response.data.user);
 
-      login(
-        response.data.user,
-        response.data.token
-      );
+      login(response.data.user, response.data.token);
 
-      navigate("/dashboard");
+toast.success("Login successful!");
+
+setTimeout(() => {
+  navigate("/dashboard");
+}, 500);
 
     } catch (error) {
 
-      alert(
+      toast.error(
         error.response?.data?.message ||
         "Login failed"
       );
@@ -73,7 +75,7 @@ const Login = () => {
             value={email}
             onChange={(e) =>
               setEmail(e.target.value)
-            }AC
+            }
             className="w-full border p-3 rounded"
           />
 
