@@ -150,7 +150,7 @@ function App() {
         }
       />
 
-      <Route
+      {/* <Route
         path="/participants/:eventId"
         element={
           <ProtectedRoute>
@@ -166,7 +166,29 @@ function App() {
             <Analytics />
           </ProtectedRoute>
         }
-      />
+      /> */}
+
+      <Route
+  path="/participants/:eventId"
+  element={
+    <ProtectedRoute>
+      <AdminRoute>
+        <Participants />
+      </AdminRoute>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/analytics/:eventId"
+  element={
+    <ProtectedRoute>
+      <AdminRoute>
+        <Analytics />
+      </AdminRoute>
+    </ProtectedRoute>
+  }
+/>
 
       <Route
   path="/edit-event/:id"
