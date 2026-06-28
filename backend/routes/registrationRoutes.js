@@ -11,17 +11,6 @@ const {
     rejectRegistration
 } = require("../controllers/registrationController");
 
-// router.post(
-//   "/",
-//   protect,
-//   registerForEvent
-// );
-
-// router.get(
-//   "/my-registrations",
-//   protect,
-// );
-
 router.post(
   "/",
   protect,
