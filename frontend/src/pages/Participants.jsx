@@ -4,6 +4,11 @@ import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import api from "../services/api";
 import toast from "react-hot-toast";
+import {
+  FaCheck,
+  FaTimes,
+  FaUserCircle
+} from "react-icons/fa";
 const Participants = () => {
 
   const { eventId } = useParams();
@@ -149,22 +154,52 @@ toast.error(
 
     <Layout>
 
-      <h1 className="text-3xl font-bold mb-6">
-        Participants
-      </h1>
+      <div className="mb-8">
 
-      <table className="w-full border">
+  <h1 className="text-3xl font-bold">
+    Event Participants
+  </h1>
 
-        <thead>
+  <p className="text-gray-500 mt-2">
+    Approve or reject registrations for this event.
+  </p>
 
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
+</div>
 
-        </thead>
+      <div
+  className="
+    overflow-x-auto
+    bg-white
+    rounded-xl
+    shadow-md
+  "
+>
+
+<table className="min-w-full">
+
+        <thead className="bg-blue-600 text-white">
+
+  <tr>
+
+    <th className="px-6 py-4 text-left">
+      User
+    </th>
+
+    <th className="px-6 py-4 text-left">
+      Email
+    </th>
+
+    <th className="px-6 py-4 text-left">
+      Status
+    </th>
+
+    <th className="px-6 py-4 text-center">
+      Actions
+    </th>
+
+  </tr>
+
+</thead>
 
         <tbody>
 
@@ -193,37 +228,147 @@ toast.error(
 
     participants.map((participant) => (
 
-      <tr key={participant.id}>
+      <tr
+  key={participant.id}
+  className="
+    even:bg-gray-50
+    hover:bg-blue-50
+    transition
+    duration-200
+  "
+>
 
-        <td>{participant.name}</td>
+  {/* User */}
 
-        <td>{participant.email}</td>
+  <td className="px-6 py-4">
 
-        <td>{participant.status}</td>
+    <div className="flex items-center gap-3">
 
-        <td>
+      <div
+        className="
+          w-10
+          h-10
+          rounded-full
+          bg-blue-600
+          text-white
+          flex
+          items-center
+          justify-center
+          font-bold
+        "
+      >
 
-          <button
-            onClick={() =>
-              approveRegistration(participant.id)
-            }
-            className="bg-green-500 text-white px-2 py-1 mr-2 rounded"
-          >
-            Approve
-          </button>
+        {participant.name.charAt(0).toUpperCase()}
 
-          <button
-            onClick={() =>
-              rejectRegistration(participant.id)
-            }
-            className="bg-red-500 text-white px-2 py-1 rounded"
-          >
-            Reject
-          </button>
+      </div>
 
-        </td>
+      <div>
 
-      </tr>
+        <p className="font-semibold">
+          {participant.name}
+        </p>
+
+        <p className="text-sm text-gray-500">
+          {participant.college || "CampusEventHub"}
+        </p>
+
+      </div>
+
+    </div>
+
+  </td>
+
+  {/* Email */}
+
+  <td className="px-6 py-4 text-gray-700">
+
+    {participant.email}
+
+  </td>
+
+  {/* Status */}
+
+  <td className="px-6 py-4">
+
+    <span
+      className={`px-3 py-1 rounded-full text-sm font-semibold ${
+        participant.status === "approved"
+          ? "bg-green-100 text-green-700"
+          : participant.status === "pending"
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-red-100 text-red-700"
+      }`}
+    >
+
+      {participant.status === "approved" && "🟢 Approved"}
+
+      {participant.status === "pending" && "🟡 Pending"}
+
+      {participant.status === "rejected" && "🔴 Rejected"}
+
+    </span>
+
+  </td>
+
+  {/* Actions */}
+
+  <td className="px-6 py-4">
+
+    <div className="flex justify-center gap-2">
+
+      <button
+        onClick={() =>
+          approveRegistration(participant.id)
+        }
+        className="
+          flex
+          items-center
+          gap-2
+          bg-green-600
+          hover:bg-green-700
+          text-white
+          px-4
+          py-2
+          rounded-lg
+          transition
+        "
+      >
+
+        <FaCheck />
+
+        Approve
+
+      </button>
+
+      <button
+        onClick={() =>
+          rejectRegistration(participant.id)
+        }
+        className="
+          flex
+          items-center
+          gap-2
+          bg-red-600
+          hover:bg-red-700
+          text-white
+          px-4
+          py-2
+          rounded-lg
+          transition
+        "
+      >
+
+        <FaTimes />
+
+        Reject
+
+      </button>
+
+    </div>
+
+  </td>
+
+</tr>
 
     ))
 
@@ -232,6 +377,7 @@ toast.error(
 </tbody>
 
       </table>
+      </div>
 
     </Layout>
 

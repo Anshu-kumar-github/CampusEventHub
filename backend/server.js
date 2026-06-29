@@ -27,12 +27,14 @@ db.connect((err) => {
 const authRoutes = require("./routes/authRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const commentRoutes = require("./routes/commentRoutes");
-
+const dashboardRoutes = require("./routes/dashboardRoutes");
+  
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.use("/api/auth", authRoutes);
 

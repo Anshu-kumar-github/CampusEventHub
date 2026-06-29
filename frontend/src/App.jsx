@@ -12,6 +12,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Analytics from "./pages/Analytics";
 import AdminRoute from "./routes/AdminRoute";
 import EditEvent from "./pages/EditEvent";
+import ManageEvents from "./pages/ManageEvents";
 
 function App() {
   return (
@@ -117,6 +118,17 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+      <Route
+        path="/manage-events"
+        element={
+          <ProtectedRoute>
+            <AdminRoute>
+              <ManageEvents />
+            </AdminRoute>
+          </ProtectedRoute>
+        }
+      />
 
     </Routes>
   );

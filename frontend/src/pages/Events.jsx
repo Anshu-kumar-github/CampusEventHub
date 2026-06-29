@@ -9,6 +9,9 @@ const Events = () => {
 
   const [events, setEvents] = useState([]);
 const [loading, setLoading] = useState(true);
+
+const [search, setSearch] = useState("");
+const [category, setCategory] = useState("All");
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -40,53 +43,139 @@ const [loading, setLoading] = useState(true);
   }
 
 };
+
+const filteredEvents = events.filter((event) => {
+
+  const matchesSearch =
+    event.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+  const matchesCategory =
+    category === "All" ||
+    event.category === category;
+
+  return (
+    matchesSearch &&
+    matchesCategory
+  );
+
+});
 if (loading) {
+  
     return (
-      <Layout>
-        <p className="text-center text-gray-500">
-          Loading events...
-          <div className="flex justify-center py-10">
-  <div
-    className="
-      h-10
-      w-10
-      animate-spin
-      rounded-full
-      border-4
-      border-gray-300
-      border-t-blue-600
-    "
-  ></div>
-</div>
-        </p>
-      </Layout>
-    );
+
+  <Layout>
+
+    <div className="text-center py-10">
+
+      <p className="text-gray-500 mb-4">
+        Loading events...
+      </p>
+
+      <div className="flex justify-center">
+
+        <div
+          className="
+            h-10
+            w-10
+            animate-spin
+            rounded-full
+            border-4
+            border-gray-300
+            border-t-blue-600
+          "
+        ></div>
+
+      </div>
+
+    </div>
+
+  </Layout>
+
+);
   }
 
   return (
 
     <Layout>
 
-      <h1 className="text-3xl font-bold mb-6">
-        Events
-      </h1>
+      <div
+  className="
+    bg-gradient-to-r
+    from-blue-600
+    via-indigo-600
+    to-purple-700
+    rounded-xl
+    text-white
+    p-8
+    mb-8
+    shadow-lg
+  "
+>
 
-      <input
-        type="text"
-        placeholder="Search Events"
-        className="border p-2 mb-4 w-full"
-      />
+  <h1 className="text-4xl font-bold">
+    Explore Campus Events 🎉
+  </h1>
 
-      <select
-        className="border p-2 mb-4"
-      >
-        <option>All</option>
-        <option>Hackathon</option>
-        <option>Workshop</option>
-        <option>Seminar</option>
-      </select>
+  <p className="mt-2 text-blue-100">
+    Discover hackathons, workshops, seminars, sports and cultural activities.
+  </p>
 
-      {events.length === 0 ? (
+</div>
+
+      <div
+  className="
+    flex
+    flex-col
+    md:flex-row
+    gap-4
+    mb-8
+  "
+>
+
+  <input
+    type="text"
+    placeholder="Search Events..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="
+      flex-1
+      border
+      rounded-lg
+      p-3
+      focus:outline-none
+      focus:ring-2
+      focus:ring-blue-500
+    "
+  />
+
+  <select
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    className="
+      md:w-60
+      border
+      rounded-lg
+      p-3
+      focus:outline-none
+      focus:ring-2
+      focus:ring-blue-500
+    "
+  >
+    <option value="All">All Categories</option>
+    <option value="Hackathon">Hackathon</option>
+    <option value="Workshop">Workshop</option>
+    <option value="Seminar">Seminar</option>
+    <option value="Sports">Sports</option>
+    <option value="Cultural">Cultural</option>
+    <option value="Technology">Technology</option>
+    <option value="Tech">Tech</option>
+  </select>
+
+</div>
+
+      {filteredEvents.length === 0 ? (
 
   <div className="text-center py-10 text-gray-500">
     <h2 className="text-xl font-semibold">
@@ -100,9 +189,17 @@ if (loading) {
 
 ) : (
 
-  <div className="grid md:grid-cols-3 gap-4">
+  <div
+  className="
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    lg:grid-cols-3
+    gap-6
+  "
+>
 
-    {events.map((event) => (
+    {filteredEvents.map((event) => (
       <EventCard
         key={event.id}
         event={event}

@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthContext";
 const Sidebar = () => {
 
   const { user } = useAuth();
-  console.log("Sidebar User:", user);
 
   return (
 
@@ -24,27 +23,37 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        <li>
-          <Link to="/my-registrations">
-            My Registrations
-          </Link>
-        </li>
+        {user?.role === "student" && (
+          <li>
+            <Link to="/my-registrations">
+              My Registrations
+            </Link>
+          </li>
+        )}
 
-        {(
-  user?.role === "college_admin" ||
-  user?.role === "super_admin"
-) && (
-  <li>
-    <Link to="/create-event">
-      Create Event
-    </Link>
-  </li>
-)}
+        {(user?.role === "college_admin" ||
+          user?.role === "super_admin") && (
+          <>
+            <li>
+              <Link to="/create-event">
+                Create Event
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/manage-events">
+                Manage Events
+              </Link>
+            </li>
+          </>
+        )}
+
       </ul>
 
     </div>
 
   );
+
 };
 
 export default Sidebar;
