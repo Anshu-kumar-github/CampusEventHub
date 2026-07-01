@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import api from "../services/api";
 
 import StatCard from "../components/StatCard";
+import QuickActionCard from "../components/QuickActionCard";
 
 import {
   FaCalendarAlt,
@@ -50,17 +51,17 @@ const pendingRegistrations =
 const recentRegistrations =
   registrations.slice(0, 3);
 
-  const handleLogout = () => {
+  // const handleLogout = () => {
 
-    logout();
+  //   logout();
 
-    toast.success("Logged out successfully!");
+  //   toast.success("Logged out successfully!");
 
-    setTimeout(() => {
-      navigate("/");
-    }, 500);
+  //   setTimeout(() => {
+  //     navigate("/");
+  //   }, 500);
 
-  };
+  // };
 
   const fetchEvents = async () => {
 
@@ -175,7 +176,7 @@ const fetchAdminDashboard = async () => {
 
       {/* Welcome Banner */}
 
-      <div
+      {/* <div
         className="
           bg-linear-to-r
           from-blue-600
@@ -200,7 +201,83 @@ const fetchAdminDashboard = async () => {
           Manage and participate in campus events.
         </p>
 
-      </div>
+      </div> */}
+      <div
+  className="
+    bg-gradient-to-r
+    from-blue-600
+    via-indigo-600
+    to-purple-700
+    rounded-3xl
+    shadow-xl
+    p-8
+    md:p-10
+    mb-10
+    text-white
+    flex
+    flex-col
+    md:flex-row
+    justify-between
+    items-center
+  "
+>
+
+  {/* Left */}
+
+  <div>
+
+    <h1 className="text-4xl md:text-5xl font-bold">
+
+      Good Morning,
+      <span className="text-yellow-300">
+        {" "}
+        {user?.name}
+      </span>
+      👋
+
+    </h1>
+
+    <p className="mt-4 text-lg text-blue-100">
+
+      Welcome back to CampusEventHub.
+
+    </p>
+
+    <p className="mt-2 text-blue-200">
+
+      Manage and participate in exciting campus events.
+
+    </p>
+
+    <Link
+      to="/events"
+      className="
+        inline-block
+        mt-6
+        bg-white
+        text-blue-700
+        px-6
+        py-3
+        rounded-xl
+        font-semibold
+        hover:bg-blue-50
+        transition
+      "
+    >
+      Explore Events →
+    </Link>
+
+  </div>
+
+  {/* Right */}
+
+  <div className="mt-8 md:mt-0 text-7xl">
+
+    🎓
+
+  </div>
+
+</div>
 
       {/* Statistics */}
 
@@ -217,36 +294,40 @@ const fetchAdminDashboard = async () => {
         {user?.role === "student" && (
   <>
     <StatCard
-      icon={<FaCalendarAlt />}
-      title="Upcoming Events"
-      value={totalEvents}
-      color="text-blue-600"
-      to="/events"
-    />
+  icon={<FaCalendarAlt />}
+  title="Upcoming Events"
+  value={totalEvents}
+  subtitle="Available Campus Events"
+  color="text-blue-600"
+  to="/events"
+/>
 
-    <StatCard
-      icon={<FaClipboardList />}
-      title="My Registrations"
-      value={totalRegistrations}
-      color="text-yellow-500"
-      to="/my-registrations"
-    />
+<StatCard
+  icon={<FaClipboardList />}
+  title="My Registrations"
+  value={totalRegistrations}
+  subtitle="Events You've Joined"
+  color="text-yellow-500"
+  to="/my-registrations"
+/>
 
-    <StatCard
-      icon={<FaUsers />}
-      title="Approved"
-      value={approvedRegistrations}
-      color="text-green-600"
-      to="/my-registrations"
-    />
+<StatCard
+  icon={<FaUsers />}
+  title="Approved"
+  value={approvedRegistrations}
+  subtitle="Successfully Approved"
+  color="text-green-600"
+  to="/my-registrations"
+/>
 
-    <StatCard
-      icon={<FaStar />}
-      title="Pending"
-      value={pendingRegistrations}
-      color="text-orange-500"
-      to="/my-registrations"
-    />
+<StatCard
+  icon={<FaStar />}
+  title="Pending"
+  value={pendingRegistrations}
+  subtitle="Awaiting Approval"
+  color="text-orange-500"
+  to="/my-registrations"
+/>
   </>
 )}
 
@@ -259,6 +340,7 @@ const fetchAdminDashboard = async () => {
   icon={<FaCalendarAlt />}
   title="Total Events"
   value={dashboard?.totalEvents ?? "--"}
+  subtitle="All Campus Events"
   color="text-blue-600"
   to="/events"
 />
@@ -267,22 +349,25 @@ const fetchAdminDashboard = async () => {
   icon={<FaUsers />}
   title="Participants"
   value={dashboard?.participants ?? "--"}
+  subtitle="Registered Students"
   color="text-green-600"
   to="/events"
 />
 
 <StatCard
   icon={<FaClipboardList />}
-  title="Pending Approvals"
+  title="Pending"
   value={dashboard?.pendingApprovals ?? "--"}
+  subtitle="Awaiting Approval"
   color="text-yellow-500"
   to="/events"
 />
 
 <StatCard
   icon={<FaStar />}
-  title="Average Rating"
+  title="Rating"
   value={dashboard?.averageRating ?? "--"}
+  subtitle="Average Feedback"
   color="text-purple-600"
 />
   </>
@@ -312,7 +397,7 @@ const fetchAdminDashboard = async () => {
 
       {/* Recent Events */}
 
-<div className="mb-10">
+{/* <div className="mb-10">
 
   <h2 className="text-2xl font-bold mb-5">
     Recent Events
@@ -389,11 +474,11 @@ const fetchAdminDashboard = async () => {
 
   </div>
 
-</div>
+</div> */}
 
         {/* View Events */}
 
-        <Link to="/events">
+        {/* <Link to="/events">
 
           <div
             className="
@@ -421,47 +506,32 @@ const fetchAdminDashboard = async () => {
             <h3 className="font-semibold text-lg">
               View Events
             </h3>
+            <p className="text-gray-500 mt-2">
+    Browse all available events
+  </p>
 
           </div>
 
-        </Link>
+        </Link> */}
+        <QuickActionCard
+  icon={<FaCalendarAlt />}
+  title="View Events"
+  description="Browse all campus events"
+  to="/events"
+  color="text-blue-600"
+/>
 
         {/* Student */}
 
         {user?.role === "student" && (
 
-          <Link to="/my-registrations">
-
-            <div
-              className="
-                bg-white
-                rounded-xl
-                shadow-md
-                hover:shadow-xl
-                hover:scale-105
-                transition
-                duration-300
-                p-6
-                text-center
-              "
-            >
-
-              <FaClipboardList
-                className="
-                  text-4xl
-                  text-yellow-500
-                  mx-auto
-                  mb-3
-                "
-              />
-
-              <h3 className="font-semibold text-lg">
-                My Registrations
-              </h3>
-
-            </div>
-
-          </Link>
+          <QuickActionCard
+  icon={<FaClipboardList />}
+  title="My Registrations"
+  description="Track your registered events"
+  to="/my-registrations"
+  color="text-yellow-500"
+/>
 
         )}
 
@@ -471,7 +541,7 @@ const fetchAdminDashboard = async () => {
           user?.role === "super_admin") && (
 
           <>
-            <Link to="/create-event">
+            {/* <Link to="/create-event">
 
               <div
                 className="
@@ -502,10 +572,18 @@ const fetchAdminDashboard = async () => {
 
               </div>
 
-            </Link>
+            </Link> */}
+
+            <QuickActionCard
+  icon={<FaPlus />}
+  title="Create Event"
+  description="Add a new campus event"
+  to="/create-event"
+  color="text-green-600"
+/>
 
             {/* <Link to="/events"> */}
-            <Link to="/manage-events">
+            {/* <Link to="/manage-events">
 
               <div
                 className="
@@ -536,7 +614,15 @@ const fetchAdminDashboard = async () => {
 
               </div>
 
-            </Link>
+            </Link> */}
+
+            <QuickActionCard
+  icon={<FaTasks />}
+  title="Manage Events"
+  description="Edit, delete and monitor events"
+  to="/manage-events"
+  color="text-purple-600"
+/>
 
           </>
 
@@ -544,11 +630,35 @@ const fetchAdminDashboard = async () => {
 
       </div>
 
-      <h2 className="text-2xl font-bold mb-5">
-  {user?.role === "student"
-    ? "Recent Registrations"
-    : "Recent Events"}
-</h2>
+      <div
+  className="
+    flex
+    justify-between
+    items-center
+    mb-6
+  "
+>
+
+  <h2 className="text-2xl font-bold">
+
+    {user?.role === "student"
+      ? "Recent Registrations"
+      : "Recent Events"}
+
+  </h2>
+
+  <Link
+    to="/events"
+    className="
+      text-blue-600
+      font-semibold
+      hover:underline
+    "
+  >
+    View All →
+  </Link>
+
+</div>
 
 {/* Student Recent Registrations */}
 
@@ -691,14 +801,44 @@ const fetchAdminDashboard = async () => {
             p-6
           "
         >
+        <div
+  className="
+    h-32
+    rounded-xl
+    mb-5
+    bg-gradient-to-r
+    from-blue-600
+    via-indigo-600
+    to-purple-700
+    flex
+    items-center
+    justify-center
+    text-white
+    text-2xl
+    font-bold
+  "
+>
+  {event.category}
+</div>
 
           <h3 className="text-xl font-semibold">
             {event.title}
           </h3>
 
-          <p className="text-gray-500 mt-2">
-            {event.category}
-          </p>
+          <span
+  className="
+    inline-block
+    bg-blue-100
+    text-blue-700
+    px-3
+    py-1
+    rounded-full
+    text-sm
+    mt-3
+  "
+>
+  {event.category}
+</span>
 
           <p className="text-gray-500">
             📍 {event.location}
@@ -714,12 +854,18 @@ const fetchAdminDashboard = async () => {
           <Link
             to={`/events/${event.id}`}
             className="
-              inline-block
-              mt-4
-              text-blue-600
-              font-semibold
-              hover:underline
-            "
+  inline-flex
+  items-center
+  justify-center
+  mt-6
+  px-4
+  py-2
+  rounded-lg
+  bg-blue-600
+  text-white
+  hover:bg-blue-700
+  transition
+"
           >
             View Details →
           </Link>
@@ -733,10 +879,64 @@ const fetchAdminDashboard = async () => {
   </div>
 
 )}
+<div
+  className="
+    mt-12
+    bg-gradient-to-r
+    from-indigo-600
+    via-blue-600
+    to-purple-700
+    rounded-3xl
+    text-white
+    p-8
+    flex
+    flex-col
+    md:flex-row
+    justify-between
+    items-center
+  "
+>
+
+  <div>
+
+    <h2 className="text-3xl font-bold">
+
+      Stay Connected 🚀
+
+    </h2>
+
+    <p className="mt-3 text-blue-100">
+
+      Create, manage and participate in amazing
+      campus events effortlessly.
+
+    </p>
+
+  </div>
+
+  <Link
+    to="/events"
+    className="
+      mt-6
+      md:mt-0
+      bg-white
+      text-blue-700
+      px-6
+      py-3
+      rounded-xl
+      font-semibold
+      hover:bg-blue-50
+      transition
+    "
+  >
+    Explore Events
+  </Link>
+
+</div>
 
       {/* Logout */}
 
-      <button
+      {/* <button
         onClick={handleLogout}
         className="
           bg-red-600
@@ -750,7 +950,7 @@ const fetchAdminDashboard = async () => {
         "
       >
         Logout
-      </button>
+      </button> */}
 
     </Layout>
 
